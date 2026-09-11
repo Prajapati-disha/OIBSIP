@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Chat Rooms{% endblock %}
+{% block content %}
+<div class="rooms-box">
+    <div class="rooms-header">
+        <h1>💬 Chat Rooms</h1>
+        <div class="user-chip">
+            Signed in as <strong>{{ username }}</strong>
+            · <a href="{{ url_for('logout') }}">Log out</a>
+        </div>
+    </div>
+
+    <form method="POST" class="create-room-form">
+        <input type="text" name="room_name" placeholder="New room name..." required>
+        <button type="submit">Create / Join Room</button>
+    </form>
+
+    <h2>Existing rooms</h2>
+    <ul class="room-list">
+        {% for room in rooms %}
+            <li>
+                <a href="{{ url_for('chat', room_name=room['name']) }}">#{{ room['name'] }}</a>
+                <span class="room-meta">created by {{ room['created_by'] }}</span>
+            </li>
+        {% else %}
+            <li class="empty">No rooms yet — create the first one above!</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

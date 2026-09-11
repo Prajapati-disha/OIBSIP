@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}#{{ room_name }} — Chat{% endblock %}
+{% block content %}
+<div class="chat-box">
+    <div class="chat-header">
+        <a href="{{ url_for('rooms') }}" class="back-link">&larr; Rooms</a>
+        <h1>#{{ room_name }}</h1>
+        <div class="user-chip">{{ username }}</div>
+    </div>
+
+    <div id="messages" class="messages">
+        {% for msg in history %}
+            <div class="message {% if msg['username'] == username %}mine{% endif %}">
+                <span class="meta">[{{ msg['timestamp'] }}] {{ msg['username'] }}:</span>
+                <span class="text">{{ msg['content'] }}</span>
+            </div>
+        {% else %}
+            <div class="empty-history">No messages yet. Say hello! (try <code>:wave:</code>)</div>
+        {% endfor %}
+    </div>
+
+    <form id="message-form" class="message-form" autocomplete="off">
+        <input type="text" id="message-input" placeholder="Type a message... (:smile: works!)" required>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+    const ROOM_NAME = {{ room_name | tojson }};
+    const USERNAME = {{ username | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}
